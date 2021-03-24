@@ -21,7 +21,6 @@ Flask-RESTful==0.3.8
 Flask-SocketIO==5.0.1
 Flask-SQLAlchemy==2.4.4
 Flask-WTF==0.14.3
-gunicorn==20.0.4
 idna==2.10
 isodate==0.6.0
 itsdangerous==1.1.0
