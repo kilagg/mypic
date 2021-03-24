@@ -1,0 +1,33 @@
+{% extends '/app/base_app.html' %}
+{% set active_page = "gallery_nav" %}
+{% set sideFooter = True %}
+{% block content %} 
+<div id="my-gallery">
+    <div id="gallery-nav" class="images-gallery-nav">
+        <button id="my-pics_button" class="selected">My Pics</button>
+        <button id="my-sell_button">My Sale</button>
+        <button id="my-resale_button">My Resale</button>
+    </div>
+    
+    <div id="my-pics_div" class="images-gallery"></div>
+    <div id="my-sell_div" class="images-gallery hidden"></div>
+    <div id="my-resale_div" class="images-gallery hidden"></div>
+    
+    <div class="lds-ring hidden loading">
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+    </div>
+</div>
+    
+<script src="https://cdn.socket.io/3.1.1/socket.io.min.js" integrity="sha384-gDaozqUvc4HTgo8iZjwth73C6dDDeOJsAgpxBcMpZYztUfjHXpzrpdrHRdVp8ySO" crossorigin="anonymous"></script>
+<script src="{{ url_for('static', filename='/js/countdown.js') }}"></script>
+<script src="{{ url_for('static', filename='/js/algo.js') }}"></script>
+<script src="{{ url_for('static', filename='/js/bid_buy.js') }}"></script>
+<script src="{{ url_for('static', filename='/js/displayGallery.js') }}"></script>
+<script>
+    initGallery("gallery", ["my-pics", "my-sell", "my-resale"], { "my-pics": "You do not have images.", "my-sell": "You have no sell", "my-sell": "You have no resale" }, { "my-pics": "sell", "my-sell": "", "my-resale": "cancel" });
+    
+</script>
+{% endblock %}

@@ -1,0 +1,16 @@
+<!doctype html>
+<link rel="stylesheet" href="{{ url_for('static', filename='/css/web.css') }}">
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<!-- Latest compiled and minified JavaScript -->
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha384-aJ21OjlMXNL5UyIl/XNwTMqvzeRMZH2w8c5cRVpzpU8Y5bApTppSuUkhZXN0VxHd" crossorigin="anonymous"></script>
+<title>My Pic</title>
+{% block body %}{% endblock %}
+<footer class="footer {%if sideFooter %}side{%endif%}">
+    <div class="break-line"></div>
+    <div class="footer-body">
+        <a class="logo">MyPic</a>
+        <a href="/contact">Contact us</a>
+        <a href="/term_of_use">Term of use</a>
+    </div>
+</footer>

@@ -1,0 +1,62 @@
+{% extends '/app/base_app.html' %} 
+{% set active_page = "gallery_nav" %}
+{% set sideFooter = True %}
+{% block content %} 
+<div id="my-gallery">
+    <div class="gallery-header">
+        <div class="pp" style="background-image: url({{ user.profile_picture }})"></div>
+        <div class="user-presentation">
+            <h1> {{ user.fullname }} </h1>
+            <h2> @{{ user.username }} </h2>
+            <h3> {{ user.followers }} followers</h3>
+            <button id="follow-button" class="follow-button fat {% if user.is_follow %} unfollow  {% endif %}"></button>
+        </div>
+    </div>
+    <div id="gallery-nav" class="images-gallery-nav">
+        <button id="my-pics_button" class="selected">Pics</button>
+        <button id="my-sell_button">Sale</button>
+        <button id="my-resale_button">Resale</button>
+    </div>
+    <div id="my-pics_div" class="images-gallery"></div>
+    <div id="my-sell_div" class="images-gallery hidden"></div>
+    <div id="my-resale_div" class="images-gallery hidden"></div>
+    <div class="lds-ring hidden loading">
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+    </div>
+</div>
+<script src="https://cdn.socket.io/3.1.1/socket.io.min.js" integrity="sha384-gDaozqUvc4HTgo8iZjwth73C6dDDeOJsAgpxBcMpZYztUfjHXpzrpdrHRdVp8ySO" crossorigin="anonymous"></script>
+<script src="{{ url_for('static', filename='/js/countdown.js') }}"></script>
+<script src="{{ url_for('static', filename='/js/algo.js') }}"></script>
+<script src="{{ url_for('static', filename='/js/bid_buy.js') }}"></script>
+<script src="{{ url_for('static', filename='/js/displayGallery.js') }}"></script>
+<script>
+    let USERNAME = window.location.href.split("gallery")[1];
+    console.log("gallery" + USERNAME);
+    initGallery("gallery" + USERNAME, ["my-pics", "my-sell", "my-resale"], {"my-pics": "They do not have images.", "my-sell": "They have no sell", "my-sell": "They have no resale" }, {"my-pics": "", "my-sell": "bid", "my-resale": "buy" });
+
+    document.getElementById("follow-button").addEventListener("click", () => {
+        let type;
+        if (document.getElementById("follow-button").classList.contains("unfollow")) {
+            type = "unfollow";
+        } else {
+            type = "follow";
+        };
+
+        document.getElementById("follow-button").classList.add("wait");
+
+        var http = new XMLHttpRequest();
+        http.open('POST', "/gallery" + USERNAME, true);
+        http.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+        http.onreadystatechange = function () {//Call a function when the state changes.
+            if (http.readyState == 4 && http.status == 200) {
+                document.getElementById("follow-button").classList.toggle("unfollow");
+                document.getElementById("follow-button").classList.remove("wait");
+            }
+        }
+        http.send("type=" + type );
+    });
+</script>
+{% endblock %}

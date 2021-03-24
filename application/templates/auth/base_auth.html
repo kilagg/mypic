@@ -1,0 +1,21 @@
+{% extends '/base.html' %}
+{% block body %}
+{% set sideFooter = False %}
+<div id="log-in-page">
+    <div class="image">
+        <div id="back-image">
+            <div id="background-back-image"></div>
+            <img src="{{ url_for('static', filename='/img/samsung.png') }}" alt="Image cool" />
+        </div>
+        <div id="front-image">
+            <div id="background-front-image"></div>
+            <img src="{{ url_for('static', filename='/img/iphone.png') }}" alt="Image cool"/>
+        </div>
+    </div>
+    <div class="login">
+        <!--<img src="{{ url_for('static', filename='/img/logo.svg') }}" alt="Logo"></img>-->
+        <a href='/login'><h1 class="logo">My Pic</h1></a>
+    {% block content %}{% endblock %}
+    </div>
+</div>
+{%endblock%}

@@ -1,0 +1,53 @@
+{% extends '/app/base_app.html' %} 
+{% set active_page = "feed_nav" %}
+{% set sideFooter = True %}
+{% block content %} 
+<div id="pictures-feed">
+    <div id="pictures-feed-nav" class="images-gallery-nav">
+        <button id="new_button" class="selected" >New Images</button>
+        <button id="resale_button">Resale</button>
+    </div>
+    <div id="new_div" class="images-gallery">
+    </div>
+    <div id="resale_div" class="images-gallery hidden">
+    </div>
+    <div class="lds-ring hidden loading">
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+    </div>
+</div>
+
+<script src="https://cdn.socket.io/3.1.1/socket.io.min.js" integrity="sha384-gDaozqUvc4HTgo8iZjwth73C6dDDeOJsAgpxBcMpZYztUfjHXpzrpdrHRdVp8ySO" crossorigin="anonymous"></script>
+<script src="{{ url_for('static', filename='/js/countdown.js') }}"></script>
+<script src="{{ url_for('static', filename='/js/algo.js') }}"></script>
+<script src="{{ url_for('static', filename='/js/bid_buy.js') }}"></script>
+<script src="{{ url_for('static', filename='/js/displayGallery.js') }}"></script>
+<script>
+    initGallery("feed", ["new", "resale"], {"new": "No new images", "resale": "No resale images"}, {"new": "bid", "resale": "buy" });
+
+    let socket = io();
+    socket.on('connect', function () {
+        console.log("Connected!")
+    });
+    socket.on('new', function (msg) {
+        try {
+            document.querySelector("#picture-" + msg[1] + " .picture-bid").setAttribute("value", msg[0]);
+            document.querySelector("#picture-" + msg[1] + " .picture-bid"). setAttribute("min", msg[0]);
+        } catch (error) {
+        }
+    });
+    socket.on('sold_out', function (msg) {
+        try {
+            var el = document.querySelector("#picture-" + msg[1] + " .buy-button"),
+                elClone = el.cloneNode(true);
+
+            el.parentNode.replaceChild(elClone, el);
+            elClone.innerHTML = "Sold";
+            
+        } catch (error) {
+        }
+    });
+</script>
+{% endblock %}

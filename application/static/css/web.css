@@ -1,0 +1,1110 @@
+:root{
+    --background: #FBFBFB;
+    --outline-color: #DDDDDD;
+    --dark-base-color: #212831;
+    --base-color: #30475E;
+    --lead-color: #F05353;
+    --lead-color-lighter: #F0A8A8;
+}
+
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;700&display=swap');
+
+@import url('https://fonts.googleapis.com/css2?family=Parisienne&display=swap');
+
+* {
+    color: var(--dark-base-color);
+    font-family: 'Open Sans', sans-serif;
+}
+
+.logo {
+    color: var(--lead-color);
+    font-family: 'Parisienne', cursive;
+}
+
+html {
+    margin: 0px;
+    height: 100%;
+}
+
+body {
+    position: relative;
+    background-color: var(--background);
+    margin: 0px;
+    min-height: 100vh;
+    padding-bottom: 4.5rem;
+}
+
+img{
+    max-width: 100%;
+    max-height: 100%;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+p {
+    font-size: small;
+    position: relative;
+    text-align: center;
+}
+
+a {
+    text-decoration: none;
+    color: var(--base-color);
+}
+
+a.active {
+    border-bottom: 3px solid var(--dark-base-color);
+    padding-bottom: 3px;
+    color: var(--dark-base-color);
+}
+
+button{
+    background: none;
+    border: none;
+}
+
+button:focus {
+    outline: none;
+}
+
+input::placeholder {
+    font-weight: bolder;
+    color: var(--base-color);
+}
+
+
+#algo-status-bar {
+    text-align: center;
+    padding-top: 10px;
+}
+
+#algo-status-bar a {
+    color: var(--lead-color);
+}
+
+#algo-status-bar button {
+    font-size: large;
+    font-weight: 900;
+    position: relative;
+    top: -1px;
+}
+/* Auth */
+/* Login */
+#log-in-page {
+    display: grid;
+    max-width: 1200px;
+    height: 100%;
+    grid-template-columns: 40% 40%;
+    gap: 0px 50px;
+    grid-template-areas:
+    "image login";
+    padding-top: 20px;
+    margin:auto;
+}
+
+#log-in-page .image{
+    grid-area: image;
+    position: relative;
+    padding-top: 50px;
+}
+
+#log-in-page .login{
+    position: relative;
+    grid-area: login;
+    display: grid;
+    align-items: center;
+    justify-items: center;
+    max-height: 480px;
+}
+
+#forgot-password-button {
+    color: var(--lead-color);
+    font-size: small;
+    position: relative;
+    top: -35px;
+    right: -251px;
+}
+
+.login form {
+    width: 400px;
+}
+
+.login input {
+    margin: 40px 25px;
+    width: 80%;
+    display: block;
+    border: none;
+    padding: 10px 0;
+    border-bottom: solid 1px var(--outline-color);
+    transition: all 0.3s cubic-bezier(.64,.09,.08,1);
+    background: linear-gradient(to bottom, rgba(255,255,255,0) 96%, var(--base-color) 4%);
+    background-position: -200px 0;
+    background-size: 200px 100%;
+    background-repeat: no-repeat;
+    color: darken(var(--base-color), 20%);
+}
+
+.login input:focus {
+    border: none;
+}
+
+.errors {
+    width: 100%;
+    text-align: center;
+    color: var(--lead-color);
+    font-weight: 800;
+}
+
+#front-image, #back-image {
+    position: absolute;
+    width: 300px;
+    height: 500px;
+}
+
+#front-image > * {
+    position: absolute;
+    right: -210px;
+    bottom: 0px;
+    height: 100%;
+}
+
+#back-image > * {
+    position: absolute;
+    right: -70px;
+    bottom: 0px;
+    height: 80%;
+}
+
+@keyframes animated-login-phone {
+  30% {
+    background-image: url("../img/front1.jpeg");
+  }
+  70% {
+    background-image: url("../img/front2.jpeg");
+  }
+  100% {
+    background-image: url("../img/front2.jpeg");
+  }
+}
+
+#front-image div {
+    border-radius: 22px;
+    background-image: url("../img/front1.jpeg");
+    background-size: cover;
+    width: 230px;
+    height: 489px;
+    background-repeat: no-repeat;
+    right: -193px;
+    bottom: 5px;
+    animation: animated-login-phone 10s infinite alternate;
+    background-position: center;
+}
+
+#back-image div {
+    border-radius: 20px;
+    background-image: url("../img/back.jpeg");
+    background-size: cover;
+    width: 179px;
+    height: 380px;
+    background-repeat: no-repeat;
+    right: -62px;
+    bottom: 5px;
+    background-position: center;
+}
+
+.login button.inline {
+    cursor: pointer;
+    font-size: small;
+    color: var(--lead-color) ;
+    display: block;
+    margin: auto;
+    cursor: pointer;
+    outline: none;
+    border: none;
+    background-color: transparent;
+}
+
+/* Footer */
+.footer {
+    position: absolute;
+    bottom: 0%;
+    width: 100%;
+}
+
+.footer.side {
+    position: fixed;
+    right: 0;
+    width: 100px;
+}
+
+.footer .break-line {
+    height: 1px;
+    background-color: lightgray;
+    width: 80%;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 4px;
+}
+
+.footer-body {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    font-size: xx-small;
+}
+
+.footer-body > * {
+    margin: 10px;
+}
+/*** 
+
+NavBar
+
+****/
+
+#navbar {
+    display: flex;
+    align-items: center;
+    background: white;
+    border: 1px solid var(--outline-color);
+    padding: 5px 30px;
+    margin-bottom: 10px;
+}
+
+#navbar a {
+    border-bottom: 3px solid white;
+    color: var(--base-color);
+    margin-right: 15px;
+    padding-bottom: 3px;
+}
+
+#navbar a.active {
+    border-bottom: 3px solid var(--dark-base-color);
+}
+
+.spacer {
+    display: inline;
+    flex-grow: 1;
+}
+
+/***** 
+
+Gallery 
+
+*******/
+
+#my-gallery {
+    margin: auto;
+}
+
+.gallery-header {
+    display: grid;
+    grid-template-columns: 250px 250px;
+    gap: 30px;
+    justify-content: center;
+    margin: 21px 0px;
+}
+
+.gallery-header .pp {
+    display: inline-block;
+    height: 250px;
+    width: 250px;
+    background-size: cover;
+    background-position: center;
+    border-radius: 50%;
+}
+
+.gallery-header .user-presentation {
+    display: grid;
+    gap: 5px;
+    grid-template-areas:
+    "fullname follower"
+    "username follow";
+}
+
+.gallery-header .user-presentation h1 {
+    grid-area: fullname;
+    margin: 0;
+    display: flex;
+    align-items: flex-end;
+}
+
+.gallery-header .user-presentation h2 {
+    grid-area: username;
+    margin: 0;
+}
+
+.gallery-header .user-presentation h3 {
+    grid-area: follower;
+    margin: 0;
+    display: flex;
+    align-items: flex-end;
+    justify-self: end;
+    position: relative;
+    top: -4px;
+}
+
+.gallery-header .user-presentation button {
+    grid-area: follow;
+}
+
+.gallery-header .user-presentation button.fat {
+    align-self: start;
+    margin: 0;
+    width: 99px;
+    height: 29px;
+    justify-self: end;
+}
+
+
+/******
+
+follow button
+
+******/
+
+button.follow-button.wait {
+    pointer-events: none;
+}
+
+button.follow-button:after{
+    content: "Follow";
+}
+
+button.follow-button.unfollow:after{
+    content: "Unfollow";
+}
+
+/***** 
+
+Gallery: Picture
+
+*******/
+
+
+.images-gallery {
+    display: grid;
+    display: grid;
+    grid-template-columns: 30% 30% 30%;
+    gap: 1%;
+    justify-content: center;
+    margin: auto;
+    width: 87%;
+}
+
+.images-gallery-nav {
+    text-align: center;
+    margin-bottom: 5px;
+}
+
+.images-gallery-nav {
+    font-weight: bolder;
+    font-size: large;
+}
+
+.images-gallery-nav button.selected {
+    border-bottom: 3px solid var(--dark-base-color);
+}
+
+.picture {
+    text-align: center;
+    width: 380px;
+    height: 480px;
+    display: grid;
+    grid-template-rows: 380px 64px 31px;
+    grid-template-areas: 
+    "photo photo"
+    "user title"
+    "countdown form";
+    align-items: center;
+    background-color: white;
+    border: 1px solid var(--outline-color);
+    border-radius: 16px;
+    overflow: hidden;
+}
+
+.picture-user {
+    grid-area: user;
+    text-align: left;
+    padding: 8px;
+}
+
+.picture-username {
+    display: inline;
+    color: var(--base-color);
+    text-align: left;
+    padding-left: 10px;
+    position: relative;
+    top: -17px;
+}
+
+.picture-title {
+    text-align: right;
+    font-weight: bolder;
+    font-size: larger;
+    color: var(--dark-base-color);
+    padding-right: 8px;
+}
+
+.picture-price {
+    grid-area: price;
+    display: inline;
+}
+
+.picture-pp {
+    display: inline-block;
+    grid-area: pp;
+    background-size: cover;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+}
+
+.picture-countdown{
+    grid-area: countdown;
+    text-align: left;
+    margin-left: 8px;
+}
+
+.picture-form {
+    grid-area: form;
+    text-align: right;
+    margin-right: 8px;
+}
+
+.picture-photo {
+    grid-area: photo;
+    padding: 0;
+    margin: 0;
+    width: 100%;
+    height: 380px;
+    overflow: hidden;
+}
+
+.picture-photo img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: 50% 50%;
+}
+
+
+.picture input[type="number"] {
+    position: relative;
+    width: 65px;
+}
+
+
+.algo {
+    background-image: url("../img/algo_logo.png");
+    background-repeat: no-repeat;
+    background-size: contain;
+    width: 15px;
+    height: 15px;
+    display: inline-block;
+}
+
+.picture .picture-form button {
+    background-color: var(--lead-color);
+    color: white;
+    width: 58px;
+    height: 25px;
+    border-radius: 5px;
+    text-align: center;
+    margin-left: 8px;
+}
+
+.picture button.sell-button {
+    display: block;
+    margin: auto;
+}
+
+.modal {
+  display: none; /* Hidden by default */
+  position: fixed; /* Stay in place */
+  z-index: 1; /* Sit on top */
+  padding-top: 100px; /* Location of the box */
+  left: 0;
+  top: 0;
+  width: 100%; /* Full width */
+  height: 100%; /* Full height */
+  overflow: auto; /* Enable scroll if needed */
+  background-color: rgb(0,0,0); /* Fallback color */
+  background-color: rgba(0,0,0,0.9); /* Black w/ opacity */
+}
+
+.modal-content {
+  margin: auto;
+  display: block;
+  width: 80%;
+  max-width: 700px;
+}
+
+.modal img {
+    width: auto;
+    max-width: 800px;
+    height: auto;
+    max-height: 500px;
+}
+
+.modal button.close {
+    height: 50px;
+    width: 50px;
+    position: absolute;
+    background: var(--background);
+    border-radius: 50%;
+    left: 90px;
+    top: 50px;
+}
+
+.modal-title {
+    color: var(--lead-color);
+    text-align: center;
+}
+
+
+.loading {
+    display: block;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    right: 50%;
+}
+
+.loading.hidden {
+    display: none;
+}
+
+
+.hidden {
+    display: none;
+}
+
+/* Feed.html */
+#pictures-feed {
+    display: grid;
+    max-height: 800px;
+}
+
+/****
+Gallery
+*****/
+#my-gallery {
+    display: grid;
+    max-height: 800px;
+}
+
+/******
+
+Market 
+
+******/
+
+#market {
+    margin: auto;
+    position: relative;
+    width: 500px;
+    background: white;
+    padding: 20px;
+    border: 1px solid #ddd;
+}
+
+#market form {
+    display: grid;
+    grid-template-columns: auto auto auto;
+    grid-auto-rows: 34px;
+    gap: 8px 5px;
+}
+
+#market form > * {
+    margin: 5px;
+    max-width: 300px;
+}
+
+
+#market form > input {
+    width: 150px;
+    grid-column: 2;
+}
+
+#market form > .file-selector-styled {
+    grid-column: span 2;
+    justify-self: center;
+    text-align: center;
+}
+
+#market form > .file-selector-styled input {
+    opacity: 0;
+    z-index: -1;
+    position: absolute;
+    width: 0px;
+    height: 0px;
+}
+
+#market form > .file-selector-styled label {
+    color: var(--lead-color);
+    font-weight: bolder;
+}
+
+#market form > img {
+    grid-column: 3;
+    grid-row: 1 span 5;
+    justify-self: center;
+    max-height: 250px;
+    max-width: 250px;
+}
+
+#market form > label {
+    justify-self: right;
+    grid-column: 1;
+}
+
+#market form > label.switch {
+    justify-self: left;
+    grid-column: 2;
+}
+
+#market form > button {
+    grid-column: span 3;
+    justify-self: center;
+}
+
+#preview_sell_market {
+    display: none;
+    width: auto;
+    max-width: 800px;
+    height: auto;
+    max-height: 500px;
+}
+
+#preview_sell_market.display {
+    display: initial;
+}
+
+/*******
+
+Account
+
+********/
+
+#my-account {
+    margin: auto;
+    margin-top: 30px;
+    display: grid;
+    justify-items: center;
+    grid-template-columns: 120px auto;
+    grid-template-rows: 140px auto;
+    width: 50%;
+    height: 100%;
+    grid-template-areas:
+        "nav picture"
+        "nav page";
+    background-color: white;
+    border: 1px solid var(--outline-color);
+}
+
+#recap_account {
+    grid-area: picture;
+    display: grid;
+    grid-template-areas: 
+        "img username"
+        "img followers" 
+        "img changeUser";
+    grid-template-columns: 120px auto;
+    gap: 2px 30px;
+    margin-bottom: 20px;
+    padding-top: 30px;
+}
+
+#recap_account .pp {
+    grid-area: img;
+    background-size: cover;
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    justify-self: center;
+    align-self: center;
+}
+
+#recap_account h1 {
+    grid-area: username;
+    margin: 0;
+    align-self: end;
+    font-weight: normal;
+}
+
+#recap_account h2 {
+    grid-area: followers;
+    margin: 0;
+    font-size: small;
+    font-weight: 400;
+}
+
+#recap_account .form {
+    grid-area: changeUser;
+}
+
+#recap_account label {
+    cursor: pointer;
+    font-weight: bolder;
+    color: var(--lead-color);
+    font-size: smaller;
+}
+
+#recap_account input {
+    opacity: 0;
+    z-index: -1;
+    position: absolute;
+    width: 0px;
+    height: 0px;
+}
+
+#recap_account button {
+    opacity: 0;
+    z-index: -1;
+    position: absolute;
+    width: 0px;
+    height: 0px;
+}
+
+#parameters {
+    grid-area: page;
+    display: grid;
+    grid-template-columns: 120px auto;
+    gap: 2px 30px;
+    margin: 20px 0px;
+}
+
+#parameters button {
+    margin-top: 30px;
+    grid-column-start: span 2;
+} 
+
+#parameters label {
+    text-align: right;
+    font-weight: bolder;
+}
+
+#algo-page {
+    margin: 20px 0px;
+}
+
+#algo-page > div {
+    padding: 10px 50px;
+}
+
+#account-nav {
+    grid-area: nav;
+    display: grid;
+    grid-template-columns: auto;
+    justify-items: start;
+    align-content: start;
+    border-right: 1px solid var(--outline-color);
+}
+
+#account-nav button {
+    height: 40px;
+    font-size: larger;
+    border: none;
+    width: 120px;
+}
+
+#account-nav button.selected {
+    border-left: 2px solid var(--dark-base-color);
+    font-weight: bolder;
+}
+
+
+/********
+
+Favorites
+
+**********/
+
+#pictures-feed-favorite {
+    position: relative;
+    display: grid;
+    max-height: 800px;
+}
+
+#manage-favorite-button {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    font-size: small;
+    text-decoration: underline;
+}
+
+#return-favorite-button {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    font-size: small;
+    text-decoration: underline;
+}
+
+#favorite-list {
+    position: relative;
+    display: flex;
+    max-height: 800px;
+    align-items: center;
+    justify-content: space-around;
+    padding: 5px 159px;
+    flex-wrap: wrap;
+}
+
+#favorite-list .user-item-holder {
+    display: grid;
+    grid-template-areas: "pp username follow" "pp fullname follow";
+    gap: 0px 17px;
+    background: #fff;
+    border: 1px solid var(--outline-color);
+    padding: 20px 30px;
+    border-radius: 32px;
+    width: 405px;
+    grid-template-columns: 70px auto 100px;
+    margin-bottom: 20px;
+}
+
+#favorite-list .user-item-holder .pp {
+    grid-area: pp;
+    width: 70px;
+    height: 70px;
+    background-position: center;
+    background-size: cover;
+    border-radius: 50%;
+}
+
+#favorite-list .user-item-holder h1 {
+    grid-area: username;
+    margin: 0;
+    align-self: flex-end;
+}
+
+#favorite-list .user-item-holder h2 {
+    grid-area: fullname;
+    margin: 0;
+    align-self: flex-start;
+    font-weight: 400;
+    font-size: medium;
+}
+
+#favorite-list .user-item-holder button {
+    grid-area: follow;
+    position: relative;
+    top: 14px;
+}
+
+#favorite-list .user-item-holder button.fat {
+    align-self: start;
+    margin: 0;
+    width: 99px;
+    height: 29px;
+    justify-self: end;
+}
+
+
+/*******
+
+Switch buttons
+
+******/
+
+/* The switch - the box around the slider */
+.switch {
+    position: relative;
+    display: inline-block;
+    width: 60px;
+    height: 34px;
+    transform: scale(0.6);
+    top: -8px;
+}
+
+/* Hide default HTML checkbox */
+.switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+/* The slider */
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #ccc;
+  -webkit-transition: .4s;
+  transition: .4s;
+}
+
+.slider .locked {
+    opacity: 0;
+}
+
+.slider .open_lock {
+    opacity: 1;
+}
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 26px;
+  width: 26px;
+  left: 4px;
+  bottom: 4px;
+  background-color: white;
+  -webkit-transition: .4s;
+  transition: .4s;
+}
+
+input:checked + .slider {
+  background-color: var(--lead-color);
+}
+
+input:checked + .slider .locked {
+    opacity: 1;
+}
+
+input:checked + .slider .open_lock {
+    opacity: 0;
+}
+
+input:focus + .slider {
+  box-shadow: 0 0 1px var(--lead-color-lighter);;
+}
+
+input:checked + .slider:before {
+  -webkit-transform: translateX(26px);
+  -ms-transform: translateX(26px);
+  transform: translateX(26px);
+}
+
+/* Rounded sliders */
+.slider.round {
+  border-radius: 34px;
+}
+
+.slider.round:before {
+  border-radius: 50%;
+}
+
+.open_lock, .locked {
+    pointer-events: none;
+    position: absolute;
+    top: 7px;
+    height: 20px;
+    width: auto;
+    -webkit-transition: .4s;
+    transition: .4s;
+}
+
+.locked {
+    right: 10px;
+}
+
+.open_lock {
+    left: 9px;
+}
+
+.nsfw {
+    pointer-events: none;
+    position: relative;
+    left: 31px;
+    top: 2px;
+    font-size: x-large;
+    opacity: 0;
+     -webkit-transition: .4s;
+    transition: .4s;
+}
+
+input:checked + .slider .nsfw {
+    opacity: 1;
+}
+
+/*******
+Fat button
+****/
+
+button.fat {
+    display: block;
+    margin: auto;
+    cursor: pointer;
+    outline: none;
+    border: none;
+    background-color: var(--lead-color-lighter);
+    width: 181px;
+    height: 43px;
+    border-radius: 10px;
+    font-size: 1.1rem;
+    font-weight: 500;
+    color: white;
+    background-size: 100% 100%;
+}
+
+button.fat:hover {
+    background-color: var(--lead-color);
+}
+
+/****
+Loading circle
+https://loading.io/css/
+*****/
+.lds-ring {
+  display: inline-block;
+  position: relative;
+  width: 80px;
+  height: 80px;
+}
+.lds-ring div {
+  box-sizing: border-box;
+  display: block;
+  position: absolute;
+  width: 64px;
+  height: 64px;
+  margin: 8px;
+  border: 8px solid var(--lead-color);
+  border-radius: 50%;
+  animation: lds-ring 1.2s cubic-bezier(0.5, 0, 0.5, 1) infinite;
+  border-color: var(--lead-color) transparent transparent transparent;
+}
+.lds-ring div:nth-child(1) {
+  animation-delay: -0.45s;
+}
+.lds-ring div:nth-child(2) {
+  animation-delay: -0.3s;
+}
+.lds-ring div:nth-child(3) {
+  animation-delay: -0.15s;
+}
+@keyframes lds-ring {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+
+#term_of_use {
+    padding: 5px 20%;
+}
+
+#term_of_use p {
+    padding-left: 32px;
+    text-align: justify;
+}
+
+#contact {
+    padding: 5px 20%;
+}
+
+#contact p {
+    padding-left: 32px;
+    text-align: justify;
+}

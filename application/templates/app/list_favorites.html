@@ -1,0 +1,41 @@
+{% extends '/app/base_app.html' %} {% set active_page = "favorites_nav" %} {% set sideFooter = True %} {% block content %} 
+<div id="favorite-list">
+<a id="return-favorite-button" href="/favorites">Return To Favorites</a>
+{% for user in users %}
+<a href="/gallery/{{user.username}}">
+    <div class="user-item-holder">
+        <div class="pp" style="background-image: url({{ user.profile_picture }})"></div>
+        <h1> {{ user.username }} </h1>
+        <h2> {{ user.fullname}} </h2>
+        <button id="follow-button-{{user.username}}" class="follow-button fat unfollow"></button>
+    </div>
+</a>
+{% endfor %}
+</div> 
+
+<script>
+    document.querySelectorAll("button").forEach((button) => {
+        button.addEventListener("click", () => {
+            let type;
+            if (document.getElementById("follow-button").classList.contains("unfollow")) {
+                type = "unfollow";
+            } else {
+                type = "follow";
+            };
+
+            document.getElementById("follow-button").classList.add("wait");
+
+            var http = new XMLHttpRequest();
+            http.open('POST', "/gallery" + button.id.split("-")[2], true);
+            http.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+            http.onreadystatechange = function () {//Call a function when the state changes.
+                if (http.readyState == 4 && http.status == 200) {
+                    document.getElementById("follow-button").classList.toggle("unfollow");
+                    document.getElementById("follow-button").classList.remove("wait");
+                }
+            }
+            http.send("type=" + type);
+        });
+    });
+</script>
+{% endblock %}

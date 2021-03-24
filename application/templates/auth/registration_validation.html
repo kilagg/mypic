@@ -1,0 +1,7 @@
+{% extends '/auth/base_auth.html' %} {% block content %}
+<form method="post">
+    {% with messages = get_flashed_messages() %} {% if messages %} <span class=errors> {{ messages[-1] }} </span> {% endif %} {% endwith %}
+    <input name="code" placeholder="Code" type="text" id="register-validation-code" required minlength="6" required maxlength="6">
+    <button id="register-validation-code-button" class="fat">Validate</button>
+</form>
+ {% endblock %}

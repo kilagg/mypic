@@ -1,0 +1,178 @@
+{% extends '/app/base_app.html' %} 
+{% set active_page = "account_nav" %}
+{% block content %} 
+<div id="my-account">
+    <div id="recap_account">
+        <div class="pp" style="background-image: url({{ user.profile_picture }})"></div>
+        <h1> {{ user.username }} </h1>
+        <h2> {{ user.followers}} followers </h2>
+        <div class="form">
+            <label for="file-selector">
+                Update Picture
+            </label>
+            <input type="file" id="file-selector" name="file" accept=".jpg, .jpeg, .png" required>
+        </div>
+    </div>
+
+    <div id="account-nav">
+        <button id="parameter-button">Parameters</button>
+        <button id="algo-button">Wallet</button>
+    </div>
+
+    <div id="parameter-page">
+        <div id="parameters">
+            <label for="fullname">Full Name</label>
+            <input type="text" placeholder="Full Name" name="fullname" minlength="1" maxlength="20" required value="{{ user.fullname }}">
+            <label for="old_password">Old Password</label>
+            <input type="password" placeholder="Old Password" name="old_password" minlength="6" maxlength="30" required>
+            <label for="new_password">New Password</label>
+            <input type="password" placeholder="New Password" name="new_password" minlength="6" maxlength="30" required>
+            <button type="submit" name="update_parameters" id="update_parameters" class="fat">Submit</button>
+        </div>
+        <div id="share">
+            <label for="shared">Shared my Profile</label>
+            <input type="text" placeholder="Share" name="share" readonly="readonly" required value="mypic.io/gallery/{{ user.username }}">
+        </div>
+    </div>
+  
+    <div id="algo-page">
+        <div>To buy cards on the website, you need to have the <a href="https://chrome.google.com/webstore/detail/algosigner/kmmolakhbgdlpkjkcjkebenjheonagdm">AlgoSigner extension</a> installed (only on Chrome). <br> After installing, click on the button below to connect your crypto wallet. </div>
+        <br>
+        <div id="algo-help-message"></div>
+        <br>
+        <button id="connect-algosigner" class="fat">Connect</button>
+    </div>
+</div>
+
+<script>
+    document.getElementById("parameter-button").addEventListener("click", () => {
+        switch_page('parameter');
+    });
+
+    document.getElementById("algo-button").addEventListener("click", () => {
+        switch_page('algo');
+    });
+    
+    $(function () {
+        $("input:file").change(function () {
+            var fileName = $(this).val();
+            update_pp();
+        });
+    });
+
+    function switch_page(page) {
+        switch (page) {
+            case "parameter":
+                document.getElementById("parameter-page")
+                    .classList.remove("hidden");
+                document.getElementById("algo-page")
+                    .classList.add("hidden");
+
+                document.getElementById("parameter-button")
+                    .classList.add("selected");
+                document.getElementById("algo-button")
+                    .classList.remove("selected");
+                break;
+
+            case "algo":
+                document.getElementById("parameter-page")
+                    .classList.add("hidden");
+                document.getElementById("algo-page")
+                    .classList.remove("hidden");
+
+                document.getElementById("parameter-button")
+                    .classList.remove("selected");
+                document.getElementById("algo-button")
+                    .classList.add("selected");
+
+                break;
+        }
+    }
+
+    switch_page("parameter");
+
+    function update_pp() {
+        var http = new XMLHttpRequest();
+        http.open('POST', '/account', true);
+        
+        var formData = new FormData();
+        formData.append("update_profile_picture", "");
+        formData.append("file", document.getElementById("file-selector").files[0]);
+        
+        http.onreadystatechange = function () {
+            if (http.readyState == 4 && http.status == 200) {
+                console.log(http.responseText);
+            }
+        }
+        http.send(formData);
+    }
+
+    function update_parameters() {
+        var http = new XMLHttpRequest();
+        http.open('POST', '/account', true);
+
+        var formData = new FormData();
+        $("#parameters input").each(function (index) {
+            formData.append($(this).attr("name"), $(this).val());
+        });
+        formData.append("update_parameters", "");
+
+        for (var key of formData.entries()) {
+            console.log(key[0] + ', ' + key[1]);
+        }
+
+        http.onreadystatechange = function () {//Call a function when the state changes.
+            if (http.readyState == 4 && http.status == 200) {
+                console.log(http.responseText);
+            }
+        }
+        http.send(formData);
+    }
+
+    document.getElementById("update_parameters")
+        .addEventListener("click", () => {
+            update_parameters();
+    });
+    
+    $('#connect-algosigner').on("click", () => {
+        if (typeof AlgoSigner === 'undefined') {
+            $('#algo-help-message').html('AlgoSigner is not installed.');
+            return
+        }
+
+        AlgoSigner.connect()
+            .then((e) => {
+                AlgoSigner.accounts({
+                    ledger: 'TestNet'
+                }).then((d) => {
+                    var http = new XMLHttpRequest();
+                    http.open('POST', '/wallet_installed', true);
+
+                    var formData = new FormData();
+                    formData.append("wallet", JSON.stringify(d));
+
+                    http.onreadystatechange = function () {
+                        if (http.readyState == 4 && http.status == 200) {
+                            $('#algo-help-message').html('AlgoSigner is connected.');
+                            try {
+                                document.getElementById("algo-status-bar").remove();
+                            } catch (error) {
+                                
+                            }
+                            
+                        }
+                    }
+                    http.send(formData);
+                })
+                .catch((e) => {
+                    console.error(e);
+                    $('#algo-help-message').html(JSON.stringify(e));
+                });
+            })
+            .catch((e) => {
+                console.error(e);
+                $('#algo-help-message').html( JSON.stringify(e));
+            });
+    });
+</script>
+{% endblock %}

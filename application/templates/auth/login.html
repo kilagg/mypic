@@ -1,0 +1,21 @@
+{% extends '/auth/base_auth.html' %}
+{% block content %}
+
+<form method="post">
+    {% with messages = get_flashed_messages() %} {% if messages %} <div class=errors> {{ messages[-1] }}</div> {% endif %} {% endwith %}
+    <input name="email" placeholder="Email" type="text" id="login-login" required minlength="4">
+    
+    <input name="password" placeholder="Password" type="password" id="login-password" required minlength="8" size="15">
+    <a id="forgot-password-button" href="/forgot_password"> Forgot password?</a>
+    
+    <button type="submit" name="login" class="fat">Login</button>
+</form>
+
+<div>
+<p>Don't have an account yet ? </p>
+<a href="/register">
+    <button id="sign-up-switch-button" class="inline">Sign up for MyPics</button>
+</a>
+</div>
+
+{% endblock %}

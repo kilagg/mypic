@@ -1,0 +1,51 @@
+{% extends '/base.html' %} {% block body %}
+{% if sideFooter is not defined%}
+{% set sideFooter = False %}
+{% endif %}
+
+{% if not session["installed"] %}
+
+<div id="algo-status-bar">
+    <button id="algo-status-bar-dismiss">&times;</button>
+    Wallet not installed. Please go to your <a href="/account">account page</a> to connect your algorand wallet.
+</div>
+
+<script>
+    try {
+        document.getElementById("algo-status-bar-dismiss")
+            .addEventListener("click", () => {
+                document.getElementById("algo-status-bar").remove();
+            });
+    } catch (error) {
+        
+    }
+</script>
+
+{% endif %}
+
+<nav id="navbar">
+    <a href="/gallery">
+        <button>
+            <h1 class="logo">MyPic</h1>
+        </button>
+    </a>
+
+    {% set navigation_bar = [ 
+        ('/create', 'create_nav', 'Create'), 
+        ('/feed', 'feed_nav', 'Feed'), 
+        ('/favorites', 'favorites_nav', 'Favorites'),
+        ('/gallery', 'gallery_nav', 'Gallery'),
+        ('/account', 'account_nav', 'Account')
+    ] -%} 
+    {% set active_page = active_page|default('index') -%}
+    
+    {% for href, id, caption in navigation_bar %} 
+        <a href="{{ href|e }}" {% if id==active_page %} class="active" {% endif %}>{{ caption|e }}</a>
+    {% endfor %}
+
+    <div class="spacer"></div>
+
+    <a href="/logout">Logout</a>
+</nav>
+{% block content %}{% endblock %}
+{% endblock %}

@@ -1,0 +1,10 @@
+{% extends '/base.html' %} {% block body %} {% if sideFooter is not defined%} {% set sideFooter = False %} {% endif %}
+ <nav id="navbar">
+    <a href="/">
+        <button>
+            <h1 class="logo">MyPic</h1>
+        </button>
+    </a>
+</nav> {% block content %}{% endblock %}
+
+{% endblock %}
