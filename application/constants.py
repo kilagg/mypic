@@ -32,12 +32,13 @@ BLOB_CONNECTION_STRING = "DefaultEndpointsProtocol=https;AccountName=mypic;Accou
 
 
 from azure.keyvault.secrets import SecretClient
-from azure.identity import DefaultAzureCredential
+from azure.identity import ManagedIdentityCredential
 
 keyVaultName = 'mypic-keyvault-prd'
 KVUri = f"https://{keyVaultName}.vault.azure.net"
 
-credential = DefaultAzureCredential()
+# credential = DefaultAzureCredential()
+credential = ManagedIdentityCredential()
 client = SecretClient(vault_url=KVUri, credential=credential)
 secret = client.get_secret("database-conn")
 CONNECTION_STRING = secret.value
