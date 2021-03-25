@@ -2,13 +2,9 @@ from algosdk import mnemonic
 from algosdk.v2client import algod
 from flask import Flask
 from flask_socketio import SocketIO
-import logging
 
 
 app = Flask(__name__)
-logs = app.logger
-logs.setLevel(logging.DEBUG)
-# TODO : remove logger
 socketio = SocketIO(app, logger=False, engineio_logger=False)
 dict_bid = {}
 dict_buy = {}

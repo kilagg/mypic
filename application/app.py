@@ -13,7 +13,6 @@ app.secret_key = b'_5#y2L"F4Q8z\n\xec]/'
 app.debug = True
 app.config["JWT_TOKEN_LOCATION"] = ["cookies"]
 app.config["JWT_BLACKLIST_ENABLED"] = True
-# TODO : Check CSRF protection
 app.config['JWT_COOKIE_CSRF_PROTECT'] = False
 app.config['JWT_ACCESS_TOKEN_EXPIRES'] = timedelta(minutes=30)
 app.config["JWT_REFRESH_TOKEN_EXPIRES"] = timedelta(hours=12)

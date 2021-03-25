@@ -66,6 +66,13 @@ def get_current_price_from_token_id(token_id: int) -> Optional[int]:
     return None
 
 
+def get_email_of_resale(token_id: int) -> Optional[str]:
+    if token_id_in_resale(token_id):
+        query = f"SELECT email FROM {SCHEMA}.{RESELL_TABLE_NAME} WHERE token_id='{token_id}'"
+        return SqlManager().query_df(query).loc[0, 'email']
+    return None
+
+
 def get_followers_from_username(username: str) -> Optional[int]:
     if username_in_db(username):
         query = f"SELECT count(*) as total_followers " \
@@ -209,7 +216,7 @@ def update_is_public(email: str, is_public: int) -> None:
 
 def update_profile_picture(username: str, data: FileStorage, extension: str) -> None:
     blob_client = BlobClient.from_connection_string(BLOB_CONNECTION_STRING, PROFILE_PICTURES_CONTAINER,
-                                                    f"{username}.{extension}")
+                                                    f"{username.lower()}.{extension}")
     blob_client.upload_blob(data)
     query = f"UPDATE {SCHEMA}.{ACCOUNT_TABLE_NAME} SET profile_picture_extension='{extension}' " \
             f"WHERE username='{username}'"

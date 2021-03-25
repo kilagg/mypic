@@ -4,7 +4,7 @@ from application.market import execute_bid
 from application.user import get_current_price_from_token_id, get_previous_bidder
 from datetime import datetime, timedelta
 from flask import redirect, url_for
-from application.smart_contract import transfer_algo_to_user, verify_bid_transaction
+from application.smart_contract import transfer_algo_to_user, verify_bid_transaction, verify_buy_transaction
 import json
 
 
@@ -60,12 +60,12 @@ def manage_auction(form, username):
                         socketio.emit("new", data=[str(int(price * 1.1) + 1), token_id])
                         if old_address is not None:
                             tx_id = transfer_algo_to_user(old_address, old_price * 1000000)
-                            # TODO : check tx_id
-                        return "Bid was done."
+                            if verify_buy_transaction(tx_id):
+                                return "Bid was done."
                     else:
                         tx_id = transfer_algo_to_user(address, price * 1000000)
-                        # TODO : check tx_id
-                        return "Refund"
+                        if verify_buy_transaction(tx_id):
+                            return "Refund"
                 else:
                     return "Transaction does not exist"
             return error

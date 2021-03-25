@@ -11,7 +11,6 @@ import json
 
 
 def manage_buy(form, username):
-    print("buy",form)
     error = None
     if 'token_id' not in form:
         error = 'Token ID is required.'

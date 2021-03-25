@@ -12,6 +12,7 @@ from application.user import (
     update_password,
     username_in_db
 )
+from azure.storage.blob import BlobClient
 from flask import (
     Blueprint,
     flash,
@@ -56,7 +57,6 @@ def login() -> Union[str, Response]:
             password = hash_password(request.form['password'])
             if ' ' in email or '@' not in email:
                 error = "Please enter a valid email."
-
 
             if error is None:
                 if not email_in_db(email):
@@ -160,8 +160,14 @@ def registration_validation() -> Union[str, Response]:
                 if get_address_from_email(email) is not None:
                     session["installed"] = True
                 save_to_db(email)
-                response = make_response(redirect(url_for('main.gallery')))
                 username = get_username_from_email(email)
+                default_client = BlobClient.from_connection_string(BLOB_CONNECTION_STRING, PROFILE_PICTURES_CONTAINER,
+                                                                   'default-profile.png')
+                data = default_client.download_blob().readall()
+                user_client = BlobClient.from_connection_string(BLOB_CONNECTION_STRING, PROFILE_PICTURES_CONTAINER,
+                                                                f"{username}.png")
+                user_client.upload_blob(data, overwrite=True)
+                response = make_response(redirect(url_for('main.gallery')))
                 access_token = create_access_token(identity={"email": email, "username": username})
                 refresh_token = create_refresh_token(identity={"email": email, "username": username})
                 set_access_cookies(response, access_token)

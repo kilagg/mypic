@@ -129,71 +129,75 @@ headers = {
 
 # Initialize an algod client
 algod_client_ = algod.AlgodClient(algod_token=algod_token, algod_address=algod_address, headers=headers)
+buyer_mnemonic = "palm bike stove away tent loud aisle love man help faculty vendor crouch yellow interest orphan next gift poem accuse gift lawsuit field above abstract"
+buyer_private_key = get_private_key_from_mnemonic(buyer_mnemonic)
+buyer_public_key = get_public_key_from_mnemonic(buyer_mnemonic)
+opt_in_asset(algod_client_, 14975242, buyer_public_key, buyer_private_key)
 status = algod_client_.status()
 
 
-seller_mnemonic = "behave vicious issue asthma welcome zone matrix matter round mechanic future estate label team name draft brain shop subway orbit jewel coin brain able hen"
-buyer_mnemonic = "tattoo market oven bench betray double tuna box sand lottery champion spend melt virus motor label bacon wine rescue custom cannon pen merry absorb endorse"
-
-#asset_owner_sk = mnemonic.to_private_key(asset_owner_mn)
-
-seller_private_key = get_private_key_from_mnemonic(seller_mnemonic)
-seller_public_key = get_public_key_from_mnemonic(seller_mnemonic)
-
-buyer_private_key = get_private_key_from_mnemonic(buyer_mnemonic)
-buyer_public_key = get_public_key_from_mnemonic(buyer_mnemonic)
-
-print("Seller address = ",seller_public_key)
-print("Buyer address = ",buyer_public_key)
-
-last_round = status['last-round']
-#example 14675037
-
-assetID_to_swap = 14674941 #can try 14675037 and 14675238
-
-price_ = 250000
-################################################################################################################
-smartcontract_addr, swap_txns = sell_nft(   algod_client = algod_client_,
-                                            micro_algo_price = price_,
-                                            assetID = assetID_to_swap,
-                                            expiry_round  = 13114964+1000, #last_round + 1000,
-                                            seller_private_key = seller_private_key,
-                                            buyer_public_key = buyer_public_key
-                                            )
-
-print("smart contract addr, for the BUYER to fund with ALGO = ",smartcontract_addr)
-
-print("funding contract with 0.12 algo...")
-params = algod_client_.suggested_params()
-params.fee = 1000
-amount = 120000
-txn = PaymentTxn(seller_public_key, params, smartcontract_addr, amount)
-stxn = txn.sign(seller_private_key)
-txid = algod_client_.send_transaction(stxn)
-print("funding contract Tx = ",txid)
-
-
-print("\nAutomatic opt in for test:")
-buyer_assets = list_all_account_assets(algod_client_, buyer_public_key)
-if assetID_to_swap in buyer_assets:
-    print("Already opt-ed in.")
-else:
-    opt_in_asset(algod_client_, assetID_to_swap, buyer_public_key, buyer_private_key)
-    input("Press Enter after BUYER has opted-in for the asset...")
-
-
-params = algod_client_.suggested_params()
-params.fee = 1000
-amount = price_
-txn = PaymentTxn(buyer_public_key, params, smartcontract_addr, amount)
-stxn = txn.sign(buyer_private_key)
-txid = algod_client_.send_transaction(stxn)
-print("Simulating Buyer Tx = ",txid)
-
-input("Press Enter to continue AFTER BUYER DEPOSITED RIGHT AMOUNT & SMART CONTRACT FUNDED ...")
-
-
-input("Press Enter to send grouped txs....")
-
-txid = send_transactions(algod_client_,swap_txns)
-print("SWAP Double Transaction ID: {}".format(txid))
+# seller_mnemonic = "behave vicious issue asthma welcome zone matrix matter round mechanic future estate label team name draft brain shop subway orbit jewel coin brain able hen"
+# buyer_mnemonic = "tattoo market oven bench betray double tuna box sand lottery champion spend melt virus motor label bacon wine rescue custom cannon pen merry absorb endorse"
+#
+# #asset_owner_sk = mnemonic.to_private_key(asset_owner_mn)
+#
+# seller_private_key = get_private_key_from_mnemonic(seller_mnemonic)
+# seller_public_key = get_public_key_from_mnemonic(seller_mnemonic)
+#
+# buyer_private_key = get_private_key_from_mnemonic(buyer_mnemonic)
+# buyer_public_key = get_public_key_from_mnemonic(buyer_mnemonic)
+#
+# print("Seller address = ",seller_public_key)
+# print("Buyer address = ",buyer_public_key)
+#
+# last_round = status['last-round']
+# #example 14675037
+#
+# assetID_to_swap = 14674941 #can try 14675037 and 14675238
+#
+# price_ = 250000
+# ################################################################################################################
+# smartcontract_addr, swap_txns = sell_nft(   algod_client = algod_client_,
+#                                             micro_algo_price = price_,
+#                                             assetID = assetID_to_swap,
+#                                             expiry_round  = 13114964+1000, #last_round + 1000,
+#                                             seller_private_key = seller_private_key,
+#                                             buyer_public_key = buyer_public_key
+#                                             )
+#
+# print("smart contract addr, for the BUYER to fund with ALGO = ",smartcontract_addr)
+#
+# print("funding contract with 0.12 algo...")
+# params = algod_client_.suggested_params()
+# params.fee = 1000
+# amount = 120000
+# txn = PaymentTxn(seller_public_key, params, smartcontract_addr, amount)
+# stxn = txn.sign(seller_private_key)
+# txid = algod_client_.send_transaction(stxn)
+# print("funding contract Tx = ",txid)
+#
+#
+# print("\nAutomatic opt in for test:")
+# buyer_assets = list_all_account_assets(algod_client_, buyer_public_key)
+# if assetID_to_swap in buyer_assets:
+#     print("Already opt-ed in.")
+# else:
+#     opt_in_asset(algod_client_, assetID_to_swap, buyer_public_key, buyer_private_key)
+#     input("Press Enter after BUYER has opted-in for the asset...")
+#
+#
+# params = algod_client_.suggested_params()
+# params.fee = 1000
+# amount = price_
+# txn = PaymentTxn(buyer_public_key, params, smartcontract_addr, amount)
+# stxn = txn.sign(buyer_private_key)
+# txid = algod_client_.send_transaction(stxn)
+# print("Simulating Buyer Tx = ",txid)
+#
+# input("Press Enter to continue AFTER BUYER DEPOSITED RIGHT AMOUNT & SMART CONTRACT FUNDED ...")
+#
+#
+# input("Press Enter to send grouped txs....")
+#
+# txid = send_transactions(algod_client_,swap_txns)
+# print("SWAP Double Transaction ID: {}".format(txid))

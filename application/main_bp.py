@@ -17,6 +17,7 @@ from application.user import (
     unfollow,
     get_address_from_email,
     get_address_from_username,
+    get_email_of_resale,
     get_followers_from_username,
     get_fullname_from_email,
     get_fullname_from_username,
@@ -56,15 +57,17 @@ REGEX_TITLE_IMAGE = "^[a-zA-Z0-9 ]*$"
 @bp.route('/account', methods=('GET', 'POST'))
 @jwt_required
 def account() -> str:
+    print("ICI")
     email = get_jwt_identity()['email']
     username = get_jwt_identity()['username']
     fullname = get_fullname_from_email(email)
-    profile_picture_extension = get_profile_picture_extension_from_email(email)
-    profile_picture = download_blob_data(PROFILE_PICTURES_CONTAINER, username + '.' + profile_picture_extension)
+    pp_extension = get_profile_picture_extension_from_email(email)
+    pp_path = pp_extension if pp_extension == 'default-profile.png' else f"{username.lower()}.{pp_extension}"
+    profile_picture = download_blob_data(PROFILE_PICTURES_CONTAINER, pp_path)
     followers = get_followers_from_username(username)
     user = {'username': username,
             'fullname': fullname,
-            'profile_picture': f"data:{profile_picture_extension};base64,{profile_picture}",
+            'profile_picture': f"data:{pp_extension};base64,{profile_picture}",
             'followers': str(followers)}
     if request.method == 'POST':
         if 'update_parameters' in request.form:
@@ -148,18 +151,18 @@ def gallery() -> str:
         address = get_address_from_email(email)
         if "more" in request.form:
             if request.form["more"] == "my-pics":
-                data_my_gallery = get_image_from_address(address, session.get('number_my_gallery'), my_image=True)
+                data_my_gallery = get_image_from_address(address, session.get('number_my_gallery'), my=True)
                 session['number_my_gallery'] = session.get('number_my_gallery') + 1
                 return json.dumps({"pictures": data_my_gallery})
 
             username = get_jwt_identity()['username']
             if request.form["more"] == "my-sell":
-                data_new_images = get_new_images(session.get('number_my_new_image'), username=username)
+                data_new_images = get_new_images(session.get('number_my_new_image'), username=username, my=True)
                 session['number_my_new_image'] = session.get('number_my_new_image') + 1
                 return json.dumps({"pictures": data_new_images})
 
             if request.form["more"] == "my-resale":
-                resale_images = get_resale(session.get('number_my_resale'), username=username)
+                resale_images = get_resale(session.get('number_my_resale'), username=username, my=True)
                 session['number_my_resale'] = session.get('number_my_resale') + 1
                 return json.dumps({"pictures": resale_images})
 
@@ -172,16 +175,17 @@ def gallery() -> str:
                     int(request.form['token_id'])
                 except ValueError:
                     error = "Enter an integer for token ID."
-                # TODO : uncomment
-                # if int(request.form['token_id']) not in list_account_assets(address):
-                #     error = "You are not in possession of this token, or go to your account to update your Algorand Address"
+
                 if error is None:
                     token_id = int(request.form['token_id'])
-                    cancel = cancel_resale(token_id)
-                    if cancel:
-                        return redirect(url_for('main.gallery'))
-                    else:
-                        return "Issue in Cancel, retry"
+                    if get_email_of_resale(token_id) != email:
+                        error = "You are not the seller of this token, you cannot cancel it."
+                    if error is None:
+                        cancel = cancel_resale(token_id)
+                        if cancel:
+                            return redirect(url_for('main.gallery'))
+                        else:
+                            return "Issue in Cancel, retry"
                 return error
 
             if request.form['type'] == 'sell':
@@ -214,6 +218,16 @@ def gallery() -> str:
     return render_template("app/gallery.html")
 
 
+@bp.route('/list_favorites', methods=('GET', 'POST'))
+@jwt_required
+def list_favorites():
+    username = get_jwt_identity()['username']
+    stars = get_stars_from_follower(username)
+    num_cores = multiprocessing.cpu_count()
+    users = Parallel(n_jobs=num_cores)(delayed(build_image_favorites)(star) for star in stars)
+    return render_template("app/list_favorites.html", users=users)
+
+
 @bp.route('/gallery/<username>', methods=('GET', 'POST'))
 @jwt_required
 def gallery_navigation(username: str) -> str:
@@ -229,7 +243,9 @@ def gallery_navigation(username: str) -> str:
                 return json.dumps({"pictures": data_my_gallery})
 
             if request.form["more"] == "my-sell":
+                print("ici", username)
                 data_new_images = get_new_images(session.get('number_other_new_image'), username=username)
+                print("longueur", len(data_new_images))
                 session['number_other_new_image'] = session.get('number_other_new_image') + 1
                 return json.dumps({"pictures": data_new_images})
 
@@ -255,13 +271,12 @@ def gallery_navigation(username: str) -> str:
                 unfollow(get_jwt_identity()['username'], username)
                 return "Unfollow done"
 
-            #TODO : buy
-
     session['number_other_gallery'] = 0
     session['number_other_new_image'] = 0
     session['number_other_resale'] = 0
     pp_extension = get_profile_picture_extension_from_username(username)
-    profile_picture = download_blob_data(PROFILE_PICTURES_CONTAINER, f"{username}.{pp_extension}")
+    pp_path = pp_extension if pp_extension == 'default-profile.png' else f"{username.lower()}.{pp_extension}"
+    profile_picture = download_blob_data(PROFILE_PICTURES_CONTAINER, pp_path)
     followers = get_followers_from_username(username)
     fullname = get_fullname_from_username(username)
     is_follow_int = int(is_follow(get_jwt_identity()['username'], username))
@@ -276,6 +291,7 @@ def gallery_navigation(username: str) -> str:
 @bp.route('/create', methods=('GET', 'POST'))
 @jwt_required
 def market() -> str:
+    print(request.form)
     if request.method == 'POST' and 'create' in request.form:
         error = None
         if 'file' not in request.files:
@@ -333,13 +349,3 @@ def wallet_installed():
         session["installed"] = True
         return "Address updated."
     return error
-
-
-@bp.route('/list_favorites', methods=('GET', 'POST'))
-@jwt_required
-def list_favorites():
-    username = get_jwt_identity()['username']
-    stars = get_stars_from_follower(username)
-    num_cores = multiprocessing.cpu_count()
-    users = Parallel(n_jobs=num_cores)(delayed(build_image_favorites)(star) for star in stars)
-    return render_template("app/list_favorites.html", users=users)
