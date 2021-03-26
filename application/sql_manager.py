@@ -1,4 +1,4 @@
-from application.constants import *
+from application import CONNECTION_STRING
 import pyodbc
 import pandas as pd
 

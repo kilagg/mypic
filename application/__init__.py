@@ -2,6 +2,7 @@ from algosdk import mnemonic
 from algosdk.v2client import algod
 from flask import Flask
 from flask_socketio import SocketIO
+import os
 
 
 app = Flask(__name__)
@@ -17,3 +18,4 @@ algod_client = algod.AlgodClient(algod_token=algod_token, algod_address=algod_ad
 # TODO : add word_mnemonic in key vault
 word_mnemonic = "behave vicious issue asthma welcome zone matrix matter round mechanic future estate label team name draft brain shop subway orbit jewel coin brain able hen"
 accounts = {1: {'pk': mnemonic.to_public_key(word_mnemonic), 'sk': mnemonic.to_private_key(word_mnemonic)}}
+CONNECTION_STRING = os.environ["database_conn"]
