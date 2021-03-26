@@ -1,3 +1,4 @@
+from application import BLOB_CONNECTION_STRING, APPLICATION_INSIGHT_MAIL_URL
 from application.constants import *
 from application.sql_manager import SqlManager
 from azure.storage.blob import BlobClient

@@ -1,3 +1,4 @@
+from application import BLOB_CONNECTION_STRING
 from application.constants import *
 from application.sql_manager import SqlManager
 from application.smart_contract import (
