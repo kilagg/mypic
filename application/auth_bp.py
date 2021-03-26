@@ -107,7 +107,6 @@ def register() -> str:
             error = "Fullname is required."
 
         if error is None:
-            # TODO : check max username and fullname + verification SQL Injection
             username = request.form['username']
             password = hash_password(request.form['password'])
             email = request.form['email']

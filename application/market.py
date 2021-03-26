@@ -79,7 +79,7 @@ def build_new_image(row: Series, my: bool) -> dict:
 def build_resale_images(row: Series, my: bool) -> dict:
     container = IMAGES_CONTAINER if row['is_public'] or my else BLURRY_IMAGES_CONTAINER
     extension = row['extension']
-    image_path = f"{row['username'].lower()}/{row['swarm_hash']}.{extension}"
+    image_path = f"{row['creator'].lower()}/{row['swarm_hash']}.{extension}"
     pp_extension = row['profile_picture_extension']
     pp_path = pp_extension if pp_extension == 'default-profile.png' else f"{row['username'].lower()}.{pp_extension}"
     image = {'username': row['username'],
