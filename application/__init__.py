@@ -20,4 +20,4 @@ accounts = {1: {'pk': mnemonic.to_public_key(word_mnemonic), 'sk': mnemonic.to_p
 
 CONNECTION_STRING = os.environ["database_conn"]
 BLOB_CONNECTION_STRING = os.environ["blob_conn"]
-APPLICATION_INSIGHT_MAIL_URL = os.environ["insight_url"]
+LOGIC_APP_MAIL_URL = os.environ["insight_url"]

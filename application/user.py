@@ -1,4 +1,4 @@
-from application import BLOB_CONNECTION_STRING, APPLICATION_INSIGHT_MAIL_URL
+from application import BLOB_CONNECTION_STRING, LOGIC_APP_MAIL_URL
 from application.constants import *
 from application.sql_manager import SqlManager
 from azure.storage.blob import BlobClient
@@ -177,9 +177,9 @@ def save_to_db_temp(reason: str, email: str, username: str = None, password: str
     print(code)
     data = {"body": f"Your validation code : {code}",
             "email": f"{email}",
-            "object": f"StarPic Security - {reason}"}
+            "object": f"MyPic Security - {reason}"}
     headers = {"Content-Type": "application/json"}
-    requests.post(APPLICATION_INSIGHT_MAIL_URL, headers=headers, json=data)
+    requests.post(LOGIC_APP_MAIL_URL, headers=headers, json=data)
 
 
 def token_id_in_new_sell(token_id: int) -> bool:
