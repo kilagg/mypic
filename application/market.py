@@ -29,7 +29,8 @@ import requests
 BLURRY_IMAGES_CONTAINER = "imagesblurry"
 IMAGES_CONTAINER = "images"
 NUMBER_PRINT_IMAGE = 9
-SWARM_URL_NODE = "https://swarm-gateways.net/bzz:/"
+# SWARM_URL_NODE = "https://swarm-gateways.net/bzz:/"
+SWARM_URL_NODE = "https://mypicstest.westeurope.cloudapp.azure.com:1633"
 
 
 def build_image_favorites(star: str) -> dict:
