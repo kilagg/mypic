@@ -118,10 +118,12 @@ def register() -> str:
                 error = "Fullname should be with a maximum of 20 characters and minimum of 1."
             if not bool(re.match(REGEX_FULLNAME, request.form['fullname'])):
                 error = "Fullname should contains only letters, numbers and spaces"
-            if len(request.form['username']) > 20 or len(request.form['username']) < 1:
+            if len(request.form['username']) > 13 or len(request.form['username']) < 1:
                 error = "Username should be with a maximum of 13 characters and minimum of 1."
             if not bool(re.match(REGEX_USERNAME, request.form['username'])):
                 error = "Username should contains only letters or numbers"
+            if len(request.form['password']) < 6:
+                error = "Password should contains at least 6 characters."
             if error is None:
                 if username_in_db(username):
                     error = f"Username {username} already exist, try an other one."

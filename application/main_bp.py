@@ -57,7 +57,6 @@ REGEX_TITLE_IMAGE = "^[a-zA-Z0-9 ]*$"
 @bp.route('/account', methods=('GET', 'POST'))
 @jwt_required
 def account() -> str:
-    print("ICI")
     email = get_jwt_identity()['email']
     username = get_jwt_identity()['username']
     fullname = get_fullname_from_email(email)
@@ -86,8 +85,8 @@ def account() -> str:
                 old_password = hash_password(request.form['old_password'])
                 new_password = hash_password(request.form['new_password'])
                 error = None
-                if len(request.form['new_password']) < 6 or len(request.form['new_password']) > 30:
-                    error = "Password should contain between 6 and 30 characters."
+                if len(request.form['new_password']) < 6:
+                    error = "Password should contains at least 6 characters."
                 if not safe_str_cmp(old_password, get_password_from_email(email)):
                     error = "Wrong Password."
                 if error is None:

@@ -1,7 +1,8 @@
 function createCountdown(initialDate, countdown) {
+    console.log(initialDate);
     var countDownDate = new Date(initialDate).getTime();
     var x = setInterval(function () {
-        var now = new Date().getTime();
+        var now = localDateToUTC(new Date()).getTime();
         var distance = countDownDate - now;
         var days = Math.floor(distance / (1000 * 60 * 60 * 24));
         var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
@@ -18,4 +19,9 @@ function createCountdown(initialDate, countdown) {
             countdown.innerHTML = "EXPIRED";
         }
     }, 1000);
+}
+
+function localDateToUTC(localDate) {
+    return new Date(localDate.getUTCFullYear(), localDate.getUTCMonth(), localDate.getUTCDate(),
+                    localDate.getUTCHours(), localDate.getUTCMinutes(), localDate.getUTCSeconds());
 }

@@ -9,7 +9,6 @@ import json
 
 
 def manage_auction(form, username):
-    print(form, username)
     error = None
     if 'token_id' not in form:
         error = 'Token ID is required.'

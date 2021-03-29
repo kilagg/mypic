@@ -1,4 +1,4 @@
-from application import BLOB_CONNECTION_STRING
+from application import BLOB_CONNECTION_STRING, SWARM_URL_NODE
 from application.constants import *
 from application.sql_manager import SqlManager
 from application.smart_contract import (
@@ -22,6 +22,7 @@ from werkzeug.datastructures import FileStorage
 from werkzeug.utils import secure_filename
 import base64
 import io
+import json
 import multiprocessing
 import requests
 
@@ -29,7 +30,6 @@ import requests
 BLURRY_IMAGES_CONTAINER = "imagesblurry"
 IMAGES_CONTAINER = "images"
 NUMBER_PRINT_IMAGE = 9
-SWARM_URL_NODE = "https://swarm-gateways.net/bzz:/"
 
 
 def build_image_favorites(star: str) -> dict:
@@ -106,7 +106,9 @@ def cancel_resale(token_id: int) -> bool:
 def create_new_image(username: str, file: FileStorage, title: str, price: int, end_date: datetime, is_public: int,
                      is_nsfw: int) -> None:
     extension = DICTIONARY_FORMAT[secure_filename(file.filename).split('.')[-1].lower()]
-    swarm_hash = upload_image_swarm(file, username, is_public)
+    swarm_hash_all = upload_image_swarm(file, username, is_public)
+    swarm_hash = swarm_hash_all[:64]
+    swarm_key = swarm_hash_all[64:]
     is_public_bool = bool(is_public)
     token_id = mint_official_nft(swarm_hash=swarm_hash,
                                  is_public=is_public_bool,
@@ -116,6 +118,9 @@ def create_new_image(username: str, file: FileStorage, title: str, price: int, e
     query = f"INSERT INTO {SCHEMA}.{TOKEN_TABLE_NAME} " \
             f"(token_id, username, swarm_hash, title, extension, number, is_public, is_nsfw) " \
             f"VALUES ({token_id}, '{username}', '{swarm_hash}', '{title}', '{extension}', 1, {is_public}, {is_nsfw})"
+    SqlManager().execute_query(query, True)
+    query = f"INSERT INTO {SCHEMA}.{SWARM_ENCRYPT_TABLE_NAME} (token_id, swarm_hash, swarm_key) " \
+            f"VALUES ({token_id}, '{swarm_hash}', '{swarm_key}')"
     SqlManager().execute_query(query, True)
     query = f"INSERT INTO {SCHEMA}.{NEW_SELL_TABLE_NAME} " \
             f"(token_id, start_price, current_price, end_date) VALUES ({token_id}, {price}, {price}, '{end_date}')"
@@ -165,7 +170,6 @@ def get_data_from_token_id(token_ids: list):
 
 def get_image_from_address(address: str, page: int, my: bool) -> list:
     token_ids = list_account_assets(address)
-    print(token_ids)
     if len(token_ids) > 0:
         df = get_data_from_token_id(token_ids)
         df = df.loc[page * NUMBER_PRINT_IMAGE:(page + 1) * NUMBER_PRINT_IMAGE - 1]
@@ -211,16 +215,13 @@ def get_resale(page: int, username: str = None, email: str = None, follower: str
 
 def upload_image_swarm(file: FileStorage, username: str, is_public) -> (str, str):
     image_format = DICTIONARY_FORMAT[secure_filename(file.filename).split('.')[-1].lower()]
+    url = SWARM_URL_NODE
     if is_public:
         headers = {"content-type": f"image/{image_format}"}
-        url = SWARM_URL_NODE
-        result = requests.post(url, data=file, headers=headers)
     else:
-        # TODO : upload image with encryption
-        headers = {"content-type": f"image/{image_format}"}
-        url = SWARM_URL_NODE
-        result = requests.post(url, data=file, headers=headers)
-    swarm_hash = result.content.decode('utf8')
+        headers = {"content-type": f"image/{image_format}", "Swarm-Encrypt": "true"}
+    result = requests.post(url, data=file, headers=headers)
+    swarm_hash = json.loads(result.content.decode('utf8'))["reference"]
     image = Image.open(file)
     output = io.BytesIO()
     image.save(output, format=image_format)
