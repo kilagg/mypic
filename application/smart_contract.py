@@ -1,7 +1,7 @@
 from algosdk import mnemonic, template
 from algosdk.error import AlgodHTTPError
 from algosdk.future.transaction import AssetConfigTxn, AssetTransferTxn, PaymentTxn
-from application import accounts, algod_client, word_mnemonic
+from application import accounts, algod_client, WORD_MNEMONIC
 from application.constants import *
 from binascii import unhexlify
 import base64
