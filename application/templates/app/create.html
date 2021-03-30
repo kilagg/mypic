@@ -10,7 +10,7 @@
         </span>
         <img id="preview_sell_market" src="#" alt="Please seleact an image."/>
 
-        <label for="price">Price: </label>
+        <label for="price">Price (in <div class="algo"></div>):</label>
         <input type="number" placeholder="Price" name="price" min="1" required>
 
         <label for="duration">Duration (hours):</label>
@@ -56,6 +56,7 @@
         $("#file-selector").change(function () {
             readURL(this);
             $("#preview_sell_market").addClass("display");
+            $("#market").addClass("preview");
         });
 </script>
 {% endblock %}

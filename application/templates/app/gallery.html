@@ -27,7 +27,7 @@
 <script src="{{ url_for('static', filename='/js/bid_buy.js') }}"></script>
 <script src="{{ url_for('static', filename='/js/displayGallery.js') }}"></script>
 <script>
-    initGallery("gallery", ["my-pics", "my-sell", "my-resale"], { "my-pics": "You do not have images.", "my-sell": "You have no sell", "my-sell": "You have no resale" }, { "my-pics": "sell", "my-sell": "", "my-resale": "cancel" });
+    initGallery("gallery", ["my-pics", "my-sell", "my-resale"], { "my-pics": "You do not have images.", "my-sell": "You have no sell", "my-resale": "You have no resale" }, { "my-pics": "sell", "my-sell": "my-sell", "my-resale": "cancel" });
     
 </script>
 {% endblock %}

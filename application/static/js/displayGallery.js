@@ -85,7 +85,6 @@ function displayImage(page, image, type) {
     let form = document.createElement("div");
     form.classList.add("picture-form")
     picture_div.appendChild(form);
-
     if (type == "sell") {
         let price = document.createElement("input");
         price.classList.add("picture-price")
@@ -153,7 +152,7 @@ function displayImage(page, image, type) {
             });
             submit.innerText = "Cancel";
             form.appendChild(submit);
-        } else if (type = "buy") {
+        } else if (type == "buy") {
             let submit = document.createElement("button");
             submit.setAttribute("type", "submit");
             submit.setAttribute("name", "buy");
@@ -163,6 +162,12 @@ function displayImage(page, image, type) {
             });
             submit.innerText = "Buy";
             form.appendChild(submit);
+
+            let seller = document.createElement("a");
+            seller.classList.add("picture-seller");
+            seller.innerText = "Sold by: " + image.seller;
+            seller.setAttribute("href", "/gallery/"+image.seller);
+            picture_div.appendChild(seller);
         } else {
             let countdown = document.createElement("div");
             countdown.classList.add("picture-countdown");
@@ -189,7 +194,7 @@ function displayImage(page, image, type) {
 function displayMore(images, page) {
     if (images.length == 0) {
         if (!displayedFirst[page]) {
-            document.getElementById(page).innerText = Errors[page];
+            document.getElementById(page + "_div").innerText = Errors[page];
         }
         endPage[page] = true;
         return;

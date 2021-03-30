@@ -385,9 +385,8 @@ Gallery: Picture
 
 
 .images-gallery {
-    display: grid;
-    display: grid;
-    grid-template-columns: 30% 30% 30%;
+    display: flex;
+    flex-wrap: wrap;
     gap: 1%;
     justify-content: center;
     margin: auto;
@@ -463,6 +462,12 @@ Gallery: Picture
 }
 
 .picture-countdown{
+    grid-area: countdown;
+    text-align: left;
+    margin-left: 8px;
+}
+
+.picture-seller {
     grid-area: countdown;
     text-align: left;
     margin-left: 8px;
@@ -605,7 +610,7 @@ Market
 #market {
     margin: auto;
     position: relative;
-    width: 500px;
+    width: 600px;
     background: white;
     padding: 20px;
     border: 1px solid #ddd;
@@ -613,9 +618,14 @@ Market
 
 #market form {
     display: grid;
-    grid-template-columns: auto auto auto;
+    grid-template-columns: auto auto;
     grid-auto-rows: 34px;
     gap: 8px 5px;
+}
+
+
+#market.preview form {
+    grid-template-columns: auto auto auto;
 }
 
 #market form > * {
@@ -649,6 +659,11 @@ Market
 }
 
 #market form > img {
+    display: none;
+}
+
+#market.preview form > img {
+    display: initial;
     grid-column: 3;
     grid-row: 1 span 5;
     justify-self: center;
@@ -667,8 +682,12 @@ Market
 }
 
 #market form > button {
-    grid-column: span 3;
+    grid-column: span 2;
     justify-self: center;
+}
+
+#market.preview form > button {
+    grid-column: span 3;
 }
 
 #preview_sell_market {
@@ -767,6 +786,10 @@ Account
     position: absolute;
     width: 0px;
     height: 0px;
+}
+
+#parameter-page {
+    margin-bottom: 10px;
 }
 
 #parameters {
@@ -1107,4 +1130,33 @@ https://loading.io/css/
 #contact p {
     padding-left: 32px;
     text-align: justify;
+}
+
+.tooltip {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    background-color: rgb(253, 253, 253);
+    border-radius: 5px;
+    padding: 50px;
+    transform: translate(-50%, -50%);
+    border: 1px solid var(--outline-color);
+}
+
+.tooltip-title {
+    position: relative;
+    font-size: xx-large;
+    font-weight: bold;
+    color: var(--lead-color);
+    margin-bottom: 14px;
+}
+
+.tooltip-title button {
+    font-size: x-large;
+    position: absolute;
+    right: 5px;
+}
+
+.tooltip-body {
+    color: var(--dark-base-color);
 }

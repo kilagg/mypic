@@ -9,7 +9,7 @@ import json
 
 
 def create_resale_smart_contract(micro_price, token_id, buyer_address):
-    seller_private_key = get_private_key_from_mnemonic(word_mnemonic)
+    seller_private_key = get_private_key_from_mnemonic(WORD_MNEMONIC)
     expiry_round = algod_client.status()['last-round'] + 1000
     ratn = 1
     min_trade = (micro_price - 1)
@@ -26,7 +26,7 @@ def create_resale_smart_contract(micro_price, token_id, buyer_address):
 
 
 def fund_smart_contract(smartcontract_address):
-    seller_private_key = get_private_key_from_mnemonic(word_mnemonic)
+    seller_private_key = get_private_key_from_mnemonic(WORD_MNEMONIC)
     params = algod_client.suggested_params()
     params.fee = 1000
     txn = PaymentTxn(ADDRESS_ALGO_OURSELF, params, smartcontract_address, 120000)
@@ -90,7 +90,7 @@ def send_transactions(tx):
 
 
 def transfer_algo_to_user(receiver, micro_algo_amount):
-    mypic_private_key = get_private_key_from_mnemonic(word_mnemonic)
+    mypic_private_key = get_private_key_from_mnemonic(WORD_MNEMONIC)
     params = algod_client.suggested_params()
     txn = PaymentTxn(ADDRESS_ALGO_OURSELF, params, receiver, micro_algo_amount)
     stxn = txn.sign(mypic_private_key)
@@ -99,7 +99,7 @@ def transfer_algo_to_user(receiver, micro_algo_amount):
 
 
 def transfer_nft_to_user(asset_id, address):
-    mypic_private_key = get_private_key_from_mnemonic(word_mnemonic)
+    mypic_private_key = get_private_key_from_mnemonic(WORD_MNEMONIC)
     params = algod_client.suggested_params()
     params.fee = 1000
     params.flat_fee = True

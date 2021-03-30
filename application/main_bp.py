@@ -17,18 +17,20 @@ from application.user import (
     unfollow,
     get_address_from_email,
     get_address_from_username,
-    get_email_of_resale,
     get_followers_from_username,
     get_fullname_from_email,
     get_fullname_from_username,
+    get_nsfw_from_email,
     get_is_public_from_username,
     get_password_from_email,
     get_profile_picture_extension_from_email,
     get_profile_picture_extension_from_username,
     get_stars_from_follower,
+    get_username_of_resale,
     hash_password,
     update_address,
     update_fullname,
+    update_nsfw,
     update_password,
     update_profile_picture
 )
@@ -64,8 +66,10 @@ def account() -> str:
     pp_path = pp_extension if pp_extension == 'default-profile.png' else f"{username.lower()}.{pp_extension}"
     profile_picture = download_blob_data(PROFILE_PICTURES_CONTAINER, pp_path)
     followers = get_followers_from_username(username)
+    nsfw = get_nsfw_from_email(email)
     user = {'username': username,
             'fullname': fullname,
+            'nsfw': nsfw,
             'profile_picture': f"data:{pp_extension};base64,{profile_picture}",
             'followers': str(followers)}
     if request.method == 'POST':
@@ -81,7 +85,11 @@ def account() -> str:
                 flash(error)
                 return error
 
-            if 'old_password' in request.form and 'new_password' in request.form:
+            if 'nsfw' in request.form and (request.form['nsfw'] == 'on') != nsfw:
+                new_nsfw = int(request.form['nsfw'] == 'on')
+                update_nsfw(email, new_nsfw)
+
+            if 'old_password' in request.form and 'new_password' in request.form and request.form['new_password'] != '':
                 old_password = hash_password(request.form['old_password'])
                 new_password = hash_password(request.form['new_password'])
                 error = None
@@ -148,13 +156,13 @@ def gallery() -> str:
     if request.method == 'POST':
         email = get_jwt_identity()['email']
         address = get_address_from_email(email)
+        username = get_jwt_identity()['username']
         if "more" in request.form:
             if request.form["more"] == "my-pics":
                 data_my_gallery = get_image_from_address(address, session.get('number_my_gallery'), my=True)
                 session['number_my_gallery'] = session.get('number_my_gallery') + 1
                 return json.dumps({"pictures": data_my_gallery})
 
-            username = get_jwt_identity()['username']
             if request.form["more"] == "my-sell":
                 data_new_images = get_new_images(session.get('number_my_new_image'), username=username, my=True)
                 session['number_my_new_image'] = session.get('number_my_new_image') + 1
@@ -177,7 +185,7 @@ def gallery() -> str:
 
                 if error is None:
                     token_id = int(request.form['token_id'])
-                    if get_email_of_resale(token_id) != email:
+                    if get_username_of_resale(token_id) != username:
                         error = "You are not the seller of this token, you cannot cancel it."
                     if error is None:
                         cancel = cancel_resale(token_id)
@@ -207,7 +215,7 @@ def gallery() -> str:
                     price = int(request.form['price'])
                     token_id = int(request.form['token_id'])
                     tx_id = request.form['txID']
-                    create_resale(email, token_id, price, tx_id)
+                    create_resale(username, token_id, price, tx_id)
                     return redirect(url_for('main.gallery'))
                 return error
         return "No api for this POST request"

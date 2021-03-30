@@ -132,7 +132,7 @@ algod_client_ = algod.AlgodClient(algod_token=algod_token, algod_address=algod_a
 buyer_mnemonic = "palm bike stove away tent loud aisle love man help faculty vendor crouch yellow interest orphan next gift poem accuse gift lawsuit field above abstract"
 buyer_private_key = get_private_key_from_mnemonic(buyer_mnemonic)
 buyer_public_key = get_public_key_from_mnemonic(buyer_mnemonic)
-opt_in_asset(algod_client_, 14975242, buyer_public_key, buyer_private_key)
+opt_in_asset(algod_client_, 15037227, buyer_public_key, buyer_private_key)
 status = algod_client_.status()
 
 

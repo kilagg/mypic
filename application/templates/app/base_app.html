@@ -3,25 +3,49 @@
 {% set sideFooter = False %}
 {% endif %}
 
-{% if not session["installed"] %}
-
-<div id="algo-status-bar">
-    <button id="algo-status-bar-dismiss">&times;</button>
-    Wallet not installed. Please go to your <a href="/account">account page</a> to connect your algorand wallet.
-</div>
-
+<script src="{{ url_for('static', filename='/js/tooltip.js') }}"></script>
 <script>
-    try {
+    var isChromium = window.chrome;
+    var winNav = window.navigator;
+    var vendorName = winNav.vendor;
+    var isOpera = typeof window.opr !== "undefined";
+    var isIEedge = winNav.userAgent.indexOf("Edge") > -1;
+    var isIOSChrome = winNav.userAgent.match("CriOS");
+
+    if (isIOSChrome) {
+    // is Google Chrome on IOS
+    } else if(
+    isChromium !== null &&
+    typeof isChromium !== "undefined" &&
+    vendorName === "Google Inc." &&
+    isOpera === false &&
+    isIEedge === false
+    ) {
+        if (typeof AlgoSigner === 'undefined') {
+            displayStatusBar("We use the AlgoSigner extention for Chrome for the transactions, please intall it to bid/buy/sell.")
+        }
+    } else { 
+        displayStatusBar("We use the AlgoSigner extention for Chrome for the transactions. Please use Chrome with AlgoSigner installed it to bid/buy/sell.")
+    }
+
+    function displayStatusBar(message) {
+        let statusBar = document.createElement("div");
+        statusBar.id = "algo-status-bar";
+        document.documentElement.appendChild(statusBar);
+
+        let closeButton = document.createElement("button");
+        closeButton.id = "algo-status-bar-dismiss";
+        closeButton.innerText = "X";
+        statusBar.appendChild(closeButton);
+
+        statusBar.innerHTML = statusBar.innerHTML + message;
+
         document.getElementById("algo-status-bar-dismiss")
             .addEventListener("click", () => {
-                document.getElementById("algo-status-bar").remove();
+                statusBar.remove();
             });
-    } catch (error) {
-        
-    }
+    } 
 </script>
-
-{% endif %}
 
 <nav id="navbar">
     <a href="/gallery">

@@ -27,11 +27,20 @@
             <input type="password" placeholder="Old Password" name="old_password" minlength="6" maxlength="30" required>
             <label for="new_password">New Password</label>
             <input type="password" placeholder="New Password" name="new_password" minlength="6" maxlength="30" required>
+            
+            <label for="private">NSFW account:</label>
+            <label class="switch">
+                <input type="checkbox" name="nsfw" id="account-nsfw">
+                <span class="slider round">
+                    <label class="nsfw">🔞</label>
+                </span>
+            </label>
+
             <button type="submit" name="update_parameters" id="update_parameters" class="fat">Submit</button>
         </div>
         <div id="share">
-            <label for="shared">Share my Profile</label>
-            <input type="text" placeholder="Share" name="share" readonly="readonly" required value="mypic.io/gallery/{{ user.username }}">
+            <label for="shared">Share my Profile:</label>
+            <input onClick="this.select(); document.execCommand('copy'); addTooltip('Copied to clipboard!', '', true);" type="text" placeholder="Share" name="share" readonly="readonly" required value="mypic.io/gallery/{{ user.username }}">
         </div>
     </div>
   

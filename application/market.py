@@ -81,8 +81,9 @@ def build_resale_images(row: Series, my: bool) -> dict:
     extension = row['extension']
     image_path = f"{row['creator'].lower()}/{row['swarm_hash']}.{extension}"
     pp_extension = row['profile_picture_extension']
-    pp_path = pp_extension if pp_extension == 'default-profile.png' else f"{row['username'].lower()}.{pp_extension}"
-    image = {'username': row['username'],
+    pp_path = pp_extension if pp_extension == 'default-profile.png' else f"{row['creator'].lower()}.{pp_extension}"
+    image = {'seller': row['seller'],
+             'username': row['creator'],
              'title': row['title'],
              'extension': f"{row['extension']}",
              'uri': f"data:image/{extension};base64,{download_blob_data(container, image_path)}",
@@ -127,14 +128,14 @@ def create_new_image(username: str, file: FileStorage, title: str, price: int, e
     SqlManager().execute_query(query, True)
 
 
-def create_resale(email: str, token_id: int, price: int, tx_id: str) -> None:
+def create_resale(username: str, token_id: int, price: int, tx_id: str) -> None:
     tx_info = wait_for_confirmation(tx_id)
     address = tx_info.get('txn').get('txn').get('snd')
     xaid = tx_info.get('txn').get('txn').get('xaid')
     confirmed = bool(tx_info.get('confirmed-round'))
     if xaid == token_id and confirmed and token_id in list_account_assets(ADDRESS_ALGO_OURSELF):
-        query = f"INSERT INTO {SCHEMA}.{RESELL_TABLE_NAME} (email, address, token_id, price) " \
-                f"VALUES ('{email}', '{address}', {token_id}, {price})"
+        query = f"INSERT INTO {SCHEMA}.{RESELL_TABLE_NAME} (username, address, token_id, price) " \
+                f"VALUES ('{username}', '{address}', {token_id}, {price})"
         SqlManager().execute_query(query, True)
 
 
@@ -203,9 +204,9 @@ def get_resale(page: int, username: str = None, email: str = None, follower: str
     df = SqlManager().query_df(query)
     df.sort_values('price', inplace=True)
     if username is not None:
-        df = df[df['username'].str.lower() == username.lower()]
+        df = df[df['seller'].str.lower() == username.lower()]
     if email is not None:
-        df = df[df['username'].str.lower() != get_username_from_email(email).lower()]
+        df = df[df['seller'].str.lower() != get_username_from_email(email).lower()]
     df.reset_index(inplace=True)
     df = df.loc[page * NUMBER_PRINT_IMAGE:(page + 1) * NUMBER_PRINT_IMAGE - 1]
     num_cores = multiprocessing.cpu_count()
@@ -221,7 +222,8 @@ def upload_image_swarm(file: FileStorage, username: str, is_public) -> (str, str
     else:
         headers = {"content-type": f"image/{image_format}", "Swarm-Encrypt": "true"}
     result = requests.post(url, data=file, headers=headers)
-    swarm_hash = json.loads(result.content.decode('utf8'))["reference"]
+    # swarm_hash = json.loads(result.content.decode('utf8'))["reference"]
+    swarm_hash = result.content.decode('utf8')
     image = Image.open(file)
     output = io.BytesIO()
     image.save(output, format=image_format)

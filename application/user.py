@@ -67,10 +67,17 @@ def get_current_price_from_token_id(token_id: int) -> Optional[int]:
     return None
 
 
-def get_email_of_resale(token_id: int) -> Optional[str]:
+def get_nsfw_from_email(email: str) -> Optional[bool]:
+    if email_in_db(email):
+        query = f"SELECT nsfw FROM {SCHEMA}.{ACCOUNT_TABLE_NAME} WHERE email='{email}'"
+        return bool(SqlManager().query_df(query).loc[0, 'nsfw'])
+    return None
+
+
+def get_username_of_resale(token_id: int) -> Optional[str]:
     if token_id_in_resale(token_id):
-        query = f"SELECT email FROM {SCHEMA}.{RESELL_TABLE_NAME} WHERE token_id='{token_id}'"
-        return SqlManager().query_df(query).loc[0, 'email']
+        query = f"SELECT username FROM {SCHEMA}.{RESELL_TABLE_NAME} WHERE token_id='{token_id}'"
+        return SqlManager().query_df(query).loc[0, 'username']
     return None
 
 
@@ -212,6 +219,11 @@ def update_fullname(email: str, fullname: str) -> None:
 
 def update_is_public(email: str, is_public: int) -> None:
     query = f"UPDATE {SCHEMA}.{ACCOUNT_TABLE_NAME} SET is_public={is_public} WHERE email='{email}'"
+    SqlManager().execute_query(query, True)
+
+
+def update_nsfw(email: str, nsfw: int) -> None:
+    query = f"UPDATE {SCHEMA}.{ACCOUNT_TABLE_NAME} SET nsfw={nsfw} WHERE email='{email}'"
     SqlManager().execute_query(query, True)
 
 
